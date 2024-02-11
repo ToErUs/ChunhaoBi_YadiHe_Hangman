@@ -11,10 +11,12 @@ class HangmanViewModel: ViewModel() {
     private var hintStatus:Int=0
     private var hangmanStatus:Int=0
     private lateinit var usedLetters: List<Char>
+    private lateinit var hintMessage:String
 
     init	{
         Log.d(TAG,	"ViewModel	instance	created")
         usedLetters= emptyList()
+        hintMessage="example hint"
     }
 
     public fun renew(){

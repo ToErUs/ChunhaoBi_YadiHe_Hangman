@@ -28,9 +28,19 @@
         <TextView
             android:id="@+id/word"
             android:layout_width="300dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:text="word"
+            android:textColor="#EA5246"
+            android:textStyle="bold|italic"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/hintMsg"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="Hint:"
             android:textColor="#EA5246"
             android:textStyle="bold|italic"
             android:textSize="18sp" />

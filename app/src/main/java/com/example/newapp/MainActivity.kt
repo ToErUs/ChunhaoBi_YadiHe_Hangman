@@ -21,12 +21,14 @@ class MainActivity : ComponentActivity() {
     private	lateinit var letterButtons: List<Button>
     private lateinit var word:TextView
     private lateinit var hangmanImage:ImageView
+    private lateinit var hintMsg:TextView
 
     //Game status parameters
     private lateinit var targetWord:String
     private var hintStatus:Int=0 //0-3
     private var hangmanStatus:Int=0 //0-10
     private lateinit var usedLetters:List<Char>
+    private var hintString:String=""
 
     //ViewModel
     private lateinit var hangmanViewModel:HangmanViewModel
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
         word=findViewById(R.id.word)
         word.setTypeface(null, Typeface.BOLD)
         word.paintFlags = word.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        hintMsg=findViewById(R.id.hintMsg)
         hangmanImage=findViewById(R.id.imageview1)
         newGameButton=findViewById(R.id.NGBtn)
         newGameButton.setOnClickListener{
@@ -97,6 +100,7 @@ class MainActivity : ComponentActivity() {
         hintStatus=0
         hangmanStatus=0
         setHangmanImage(0)
+        setHintMsg("")
         enableAllButtons()
         setGuessedWord(" ".repeat(targetWord.length))
     }
@@ -135,6 +139,9 @@ class MainActivity : ComponentActivity() {
 
 
     //backend->UI interfaces:
+    private fun setHintMsg(_hintString:String){
+        hintMsg.setText("Hint: "+_hintString)
+    }
     private fun setGuessedWord(_word:String){
         //_word should be a combination of spaces and guessed letters, eg. "  AM l "
         word.setText(_word)
