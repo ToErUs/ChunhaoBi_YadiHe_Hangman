@@ -1,6 +1,8 @@
 package com.example.newapp
 
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.ContentValues
 import android.graphics.Color
 import android.graphics.Paint
@@ -12,8 +14,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import android.content.Context
+import androidx.fragment.app.DialogFragment
 
 import androidx.lifecycle.ViewModelProvider
+
 
 private const val TAG = "MainActivity"
 
@@ -26,6 +31,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var word:TextView
     private lateinit var hangmanImage:ImageView
     private lateinit var hintMsg:TextView
+    //private lateinit var dialog:Dialog
+    //private lateinit var messageTextView:TextView
+    //private lateinit var okButton:Button
+    private lateinit var builder:AlertDialog.Builder
 
     //Game status parameters
     private var targetWord:String = ""
@@ -51,6 +60,15 @@ class MainActivity : ComponentActivity() {
         word.paintFlags = word.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         hintMsg=findViewById(R.id.hintMsg)
         hangmanImage=findViewById(R.id.imageview1)
+
+        builder= AlertDialog.Builder(this)
+        builder.setTitle("Game ended")
+
+        builder.setPositiveButton("Start a new game") { dialog, which ->
+            // Do something when the user clicks the OK button
+            ngBtnClicked()
+        }
+
         newGameButton=findViewById(R.id.NGBtn)
         newGameButton.setOnClickListener{
             ngBtnClicked();
@@ -146,28 +164,34 @@ class MainActivity : ComponentActivity() {
                 letterHit = true
             }
         }
-        if (!letterHit)
+        if (!letterHit){
             setHangmanImage(++hangmanStatus)
-        else
+            if(hangmanStatus==10){
+
+                builder.setMessage("You lost the game!")
+                val dialog = builder.create()
+                // Display the dialog
+                dialog.show()
+
+            }
+        }
+
+        else{
             word.setText(String(displayWord))
+            if(!displayWord.contains(' ')){
+                //win game
+
+                builder.setMessage("Congratulations! You won the game!")
+                val dialog = builder.create()
+                // Display the dialog
+                dialog.show()
+            }
+        }
+
 
 
         disableButtonByLetter(buttonText)
 
-        /*--used for test
-        Toast.makeText(
-            this,
-            buttonText.toString(),
-            Toast.LENGTH_SHORT)
-            .show()
-        word.setText(buttonText.toString())
-        letterButtons.forEach { button ->
-            if (button.text.first() == buttonText) {
-                disableButton(button)
-
-            }
-        }
-         */
     }
 
     //backend->UI interfaces:
@@ -214,7 +238,9 @@ class MainActivity : ComponentActivity() {
         //  imgNumber: Should be an Int between 0-10.
         // TODO: check what's wrong here
 
-        val resourceId = resources.getIdentifier("i"+imgNumber.toString()+".jpg", "drawable", packageName)
+        val resourceId = resources.getIdentifier("i"+imgNumber.toString(), "drawable", packageName)
         hangmanImage.setImageResource(resourceId)
+        Log.d(TAG,	"set img to "+"i"+imgNumber.toString())
     }
 }
+
