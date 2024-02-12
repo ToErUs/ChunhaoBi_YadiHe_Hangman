@@ -5,23 +5,24 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 
 class HangmanViewModel: ViewModel() {
-
-
     var word:String="EXAMPLE"
-    private var hintStatus:Int=0
-    private var hangmanStatus:Int=0
-    private lateinit var usedLetters: List<Char>
-    private lateinit var hintMessage:String
+    var hintStatus:Int=0
+    var hangmanStatus:Int=0
+    var usedLetters = Array<Boolean>(26){false}
+    var hintMessage:String = "example hint"
 
     init	{
-        Log.d(TAG,	"ViewModel	instance	created")
-        usedLetters= emptyList()
-        hintMessage="example hint"
+        Log.d(TAG,	"ViewModel	instance created")
+//        hintMessage="example hint"
     }
 
     public fun renew(){
         //set all parameters to initial status
         //TODO:to be implemented
+        usedLetters.fill(false)
+        hintStatus = 0
+        hangmanStatus = 0
+        hintMessage = ""
     }
 
     public fun get1Word(): String {

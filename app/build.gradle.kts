@@ -69,4 +69,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     testImplementation ("androidx.arch.core:core-testing:2.2.0")
     implementation	("androidx.lifecycle:lifecycle-extensions:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
 }

@@ -1,17 +1,21 @@
 package com.example.newapp
 
 
+import android.content.ContentValues
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 
 import androidx.lifecycle.ViewModelProvider
 
+private const val TAG = "MainActivity"
 
 class MainActivity : ComponentActivity() {
 
@@ -24,16 +28,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var hintMsg:TextView
 
     //Game status parameters
-    private lateinit var targetWord:String
+    private var targetWord:String = ""
     private var hintStatus:Int=0 //0-3
-    private var hangmanStatus:Int=0 //0-10
-    private lateinit var usedLetters:List<Char>
-    private var hintString:String=""
+    private var hangmanStatus:Int=1 //0-10
+    private var hintString:String="start"
+    private var usedLetters = Array<Boolean>(26){false}
 
     //ViewModel
     private lateinit var hangmanViewModel:HangmanViewModel
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -68,21 +70,41 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        usedLetters= emptyList()
-
         //Load game status parameters from ViewModel and start a new game
         loadViewModel()
-        refresh()
-
-
-
         }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        saveViewModel()
+    }
     private fun loadViewModel() {
-        //load all the game status parameters form viewModel
-        targetWord=hangmanViewModel.get1Word()
-        //TODO:to be implemented
+        //load all the game status parameters from viewModel
+        targetWord = hangmanViewModel.get1Word()
+        usedLetters = hangmanViewModel.usedLetters
+        hintString = hangmanViewModel.hintMessage
+        hintStatus = hangmanViewModel.hintStatus
+        hangmanStatus = hangmanViewModel.hangmanStatus
 
+        setHangmanImage(hangmanStatus)
+        setHintMsg(hintString)
+        enableAllButtons()
+        setGuessedWord(" ".repeat(targetWord.length))
+
+        for(i in 0 until 26) {
+            if (usedLetters[i])
+                letterClicked('A'+i)
+        }
+        Log.d(TAG,	"load to view model")
+    }
+    private fun saveViewModel() {
+        //load all the game status parameters from viewModel
+        hangmanViewModel.set1Word(targetWord)
+        hangmanViewModel.usedLetters = usedLetters
+        hangmanViewModel.hintMessage = hintString
+        hangmanViewModel.hintStatus = hintStatus
+        hangmanViewModel.hangmanStatus = hangmanStatus
+        Log.d(TAG,	"save to view model")
     }
 
     //UI->backend interfaces:
@@ -91,36 +113,47 @@ class MainActivity : ComponentActivity() {
         //Parameters:
         //  None
         hangmanViewModel.renew()
-        loadViewModel()
         refresh()
+        loadViewModel()
     }
 
     private fun refresh(){
-        usedLetters= emptyList()
-        hintStatus=0
-        hangmanStatus=0
+        // set layout view to empty
         setHangmanImage(0)
         setHintMsg("")
         enableAllButtons()
         setGuessedWord(" ".repeat(targetWord.length))
     }
 
-
-
     private fun hintBtnClicked() {
         //When the hint button is clicked, this function will be called
         //Parameters:
         //  None
-        //TODO:to be implemented
+        //TODO: to be implemented
     }
 
     private fun letterClicked(buttonText: Char) {
         //When a letter button is clicked, this function will be called
         //Parameters:
         //  buttonText: The letter(capital) being clicked
-        //TODO:to be implemented
+
+        usedLetters[buttonText-'A'] = true
+        var displayWord = word.text.toString().toCharArray()
+        var letterHit = false
+        for (i in 0 until targetWord.length) {
+            if(targetWord[i]==buttonText) {
+                displayWord[i] = buttonText
+                letterHit = true
+            }
+        }
+        if (!letterHit)
+            setHangmanImage(++hangmanStatus)
+        else
+            word.setText(String(displayWord))
+
 
         disableButtonByLetter(buttonText)
+
         /*--used for test
         Toast.makeText(
             this,
@@ -136,7 +169,6 @@ class MainActivity : ComponentActivity() {
         }
          */
     }
-
 
     //backend->UI interfaces:
     private fun setHintMsg(_hintString:String){
@@ -176,15 +208,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
     private fun setHangmanImage(imgNumber:Int){
         //This function sets hangman image
         //Parameters:
         //  imgNumber: Should be an Int between 0-10.
+        // TODO: check what's wrong here
 
         val resourceId = resources.getIdentifier("i"+imgNumber.toString()+".jpg", "drawable", packageName)
         hangmanImage.setImageResource(resourceId)
     }
-
-
 }
