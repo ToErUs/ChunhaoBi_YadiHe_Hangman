@@ -251,10 +251,10 @@ class MainActivity : ComponentActivity() {
             val textSizeInSp = 16 // Set your desired text size in sp
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp.toFloat())
             val scaledPixelsToPixels = textSizeInSp * density
-            val widthInPixels = scaledPixelsToPixels.toInt() * 3 // Adjust the multiplier as needed
-            val heightInPixels = scaledPixelsToPixels.toInt() * 3
-            val margin=(scaledPixelsToPixels*0.5).toInt()
-            val padding = (scaledPixelsToPixels*0.5).toInt()
+            val widthInPixels = (scaledPixelsToPixels* 2.5).toInt() // Adjust the multiplier as needed
+            val heightInPixels = widthInPixels
+            val margin=(scaledPixelsToPixels*0.25).toInt()
+            val padding = 0
             textView.setText(char.toString())
             textView.width = widthInPixels
             textView.height = heightInPixels
