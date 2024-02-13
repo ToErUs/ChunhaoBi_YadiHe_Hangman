@@ -2,28 +2,38 @@ package com.example.ChunhaoBi_YadiHe_Hangman
 
 
 import android.app.AlertDialog
+import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.util.TypedValue
-import android.view.Gravity
-import android.widget.LinearLayout
 import androidx.core.graphics.drawable.toBitmap
-
 import androidx.lifecycle.ViewModelProvider
 import com.example.ChunhaoBi_YadiHe_Hangman.databinding.LayoutBinding
+import java.security.AccessController.getContext
+
+
+
+
 
 private const val TAG = "MainActivity"
 private const val LETTER_NUM = 26
 
 class MainActivity : ComponentActivity() {
+
+    var textBoxWidth=0
+
     private lateinit var binding: LayoutBinding
 
     //Components on the screen
@@ -56,7 +66,6 @@ class MainActivity : ComponentActivity() {
         builder.setTitle("Game ended")
 
         builder.setPositiveButton("Start a new game") { _, _ ->
-            // Do something when the user clicks the OK button
             ngBtnClicked()
         }
 
@@ -78,12 +87,25 @@ class MainActivity : ComponentActivity() {
         }
         //Load game status parameters from ViewModel and start a new game
         loadViewModel()
+        //setBoxWidth()
         }
 
     override fun onDestroy() {
         super.onDestroy()
         saveViewModel()
     }
+    fun setBoxWidth(){
+        val parentLayout = findViewById<View>(R.id.boxParent)
+        parentLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val parentWidth = parentLayout.width
+                textBoxWidth=parentWidth
+                parentLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+
     private fun loadViewModel() {
         //load all the game status parameters from viewModel
         targetWord = getString(hangmanViewModel.word)
@@ -148,6 +170,7 @@ class MainActivity : ComponentActivity() {
         setHangmanImage(0)
         setHintMsg("")
         enableAllButtons()
+        //setBoxWidth()
         setGuessedWord(" ".repeat(targetWord.length))
     }
     private fun hintBtnClicked() {
@@ -237,45 +260,69 @@ class MainActivity : ComponentActivity() {
         binding.hintMsg.text = "Hint: "+hintString
     }
     private fun setGuessedWord(word:String){
-        val density = resources.displayMetrics.density
-
-        //_word should be a combination of spaces and guessed letters, eg. "  AM l "
+        val parentLayout = findViewById<View>(R.id.boxParent)
         binding.word.text = word
-        Log.d(TAG,	"Set word to "+word)
 
-        val linearLayout = findViewById<LinearLayout>(R.id.wordBox)
 
-        linearLayout.removeAllViews();
-        for (char in word) {
-            val textView = TextView(this)
-            val textSizeInSp = 16 // Set your desired text size in sp
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp.toFloat())
-            val scaledPixelsToPixels = textSizeInSp * density
-            val widthInPixels = (scaledPixelsToPixels* 2.5).toInt() // Adjust the multiplier as needed
-            val heightInPixels = widthInPixels
-            val margin=(scaledPixelsToPixels*0.25).toInt()
-            val padding = 0
-            textView.setText(char.toString())
-            textView.width = widthInPixels
-            textView.height = heightInPixels
-            //textView.setBackgroundColor(Color.GRAY)
-            textView.gravity = Gravity.CENTER
-            val drawable = resources.getDrawable(R.drawable.underline, null) // Replace `your_image` with the name of your image file
-            val bitmapDrawable = BitmapDrawable(resources, drawable.toBitmap(widthInPixels, heightInPixels, Bitmap.Config.ARGB_8888))
-            textView.background = bitmapDrawable
+        parentLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                // Get the actual width of the parent view
+                val density = resources.displayMetrics.density
 
-            // Set padding to ensure the text is centered both horizontally and vertically
-             // Adjust padding as needed
-            textView.setPadding(padding, padding, padding, padding)
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams.setMargins(margin, margin, margin, margin)
-            textView.layoutParams = layoutParams
+                //_word should be a combination of spaces and guessed letters, eg. "  AM l "
 
-            linearLayout.addView(textView)
-        }
+                Log.d(TAG,	"Set word to "+word)
+
+                val linearLayout = findViewById<LinearLayout>(R.id.wordBox)
+
+                linearLayout.removeAllViews();
+                for (char in word) {
+
+                    val textSizeInSp = 16
+
+                    val mainActivity = this@MainActivity
+                    val textView = TextView(mainActivity)
+                    var parentWidth = textBoxWidth
+                    if(parentWidth==0){
+                        parentWidth=parentLayout.width
+                        textBoxWidth=parentWidth
+                    }
+
+                    //val parentHeight = parentLayout.height
+                    Log.d(TAG,"Parent width is "+parentWidth.toString())
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp.toFloat())
+                    val scaledPixelsToPixels = textSizeInSp * density
+                    //val widthInPixels = (scaledPixelsToPixels* 2.5).toInt()
+                    //val heightInPixels = widthInPixels
+                    val widthInPixels = (parentWidth* 0.1).toInt()
+                    val heightInPixels = widthInPixels
+                    Log.d(TAG,"width set to "+widthInPixels.toString())
+                    val margin=(widthInPixels*0.25).toInt()
+                    val padding = 0
+                    textView.setText(char.toString())
+                    textView.width = widthInPixels
+                    textView.height = heightInPixels
+                    //textView.setBackgroundColor(Color.GRAY)
+                    textView.gravity = Gravity.CENTER
+                    val drawable = resources.getDrawable(R.drawable.underline, null)
+                    val bitmapDrawable = BitmapDrawable(resources, drawable.toBitmap(widthInPixels, heightInPixels, Bitmap.Config.ARGB_8888))
+                    textView.background = bitmapDrawable
+                    textView.setPadding(padding, padding, padding, padding)
+                    val layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    //layoutParams.setMargins(margin, margin, margin, margin)
+                    textView.layoutParams = layoutParams
+                    if (textView.getParent() != null) {
+                        (textView.getParent() as ViewGroup).removeView(textView) // <- fix
+                    }
+                    linearLayout.addView(textView)
+                }
+                parentLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+
     }
     private fun enableAllButtons(){
         letterButtons.forEach { button ->
