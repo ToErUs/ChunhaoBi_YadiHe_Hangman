@@ -5,12 +5,22 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 
 class HangmanViewModel: ViewModel() {
-    var word:String="EXAMPLE"
+    val word:Int
+        get() = questionBank[currentIndex].textResId
     var hintStatus:Int=0
     var hangmanStatus:Int=0
     var usedLetters = Array<Boolean>(26){false}
-    var hintMessage:String = "example hint"
+    val hintMessage:Int
+        get() = questionBank[currentIndex].hintResId
 
+    private val questionBank = listOf(
+        WordPuzzle(R.string.chicken, R.string.chicken_hint),
+        WordPuzzle(R.string.australia, R.string.australia_hint),
+        WordPuzzle(R.string.football, R.string.football_hint),
+        WordPuzzle(R.string.happy, R.string.happy_hint),
+        WordPuzzle(R.string.triangle, R.string.triangle_hint),
+    )
+    private var currentIndex:Int=0
     init	{
         Log.d(TAG,	"ViewModel	instance created")
 //        hintMessage="example hint"
@@ -22,18 +32,6 @@ class HangmanViewModel: ViewModel() {
         usedLetters.fill(false)
         hintStatus = 0
         hangmanStatus = 0
-        hintMessage = ""
+        currentIndex = (currentIndex + 1) % questionBank.size
     }
-
-    public fun get1Word(): String {
-        return word
-    }
-    public fun set1Word(_word:String){
-        word=_word
-    }
-
-    //TODO:and other interfaces...
-
-
-
 }
