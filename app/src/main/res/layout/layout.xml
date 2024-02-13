@@ -27,13 +27,21 @@
 
         <TextView
             android:id="@+id/word"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="word"
             android:textColor="#EA5246"
-            android:textSize="18sp"
-            android:textStyle="bold|italic" />
+            android:textSize="1sp"
+            android:textStyle="bold|italic"
+            android:visibility="invisible"/>
+        <LinearLayout
+            android:id="@+id/wordBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            />
 
         <TextView
             android:id="@+id/hintMsg"
@@ -50,7 +58,8 @@
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hint" />
+            android:text="Hint"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 

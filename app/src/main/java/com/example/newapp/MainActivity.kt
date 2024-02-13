@@ -15,6 +15,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.view.Gravity
+import android.widget.LinearLayout
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 
 import androidx.lifecycle.ViewModelProvider
@@ -177,7 +182,7 @@ class MainActivity : ComponentActivity() {
         }
 
         else{
-            word.setText(String(displayWord))
+            setGuessedWord(String(displayWord))
             if(!displayWord.contains(' ')){
                 //win game
 
@@ -201,6 +206,32 @@ class MainActivity : ComponentActivity() {
     private fun setGuessedWord(_word:String){
         //_word should be a combination of spaces and guessed letters, eg. "  AM l "
         word.setText(_word)
+        val linearLayout = findViewById<LinearLayout>(R.id.wordBox)
+        val margin=10
+        linearLayout.removeAllViews();
+        for (char in _word) {
+            val textView = TextView(this)
+            textView.setText(char.toString())
+            textView.width = 90
+            textView.height = 90
+            //textView.setBackgroundColor(Color.GRAY)
+            textView.gravity = Gravity.CENTER
+            val drawable = resources.getDrawable(R.drawable.underline, null) // Replace `your_image` with the name of your image file
+            val bitmapDrawable = BitmapDrawable(resources, drawable.toBitmap(90, 90, Bitmap.Config.ARGB_8888))
+            textView.background = bitmapDrawable
+
+            // Set padding to ensure the text is centered both horizontally and vertically
+            val padding = 10 // Adjust padding as needed
+            textView.setPadding(padding, padding, padding, padding)
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.setMargins(margin, margin, margin, margin)
+            textView.layoutParams = layoutParams
+
+            linearLayout.addView(textView)
+        }
     }
     private fun enableAllButtons(){
         letterButtons.forEach { button ->
