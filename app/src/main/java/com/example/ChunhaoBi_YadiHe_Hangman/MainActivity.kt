@@ -192,6 +192,7 @@ class MainActivity : ComponentActivity() {
                 for (i in 0 until  LETTER_NUM) {
                     if (!usedLetters[i] && 'A'+ i !in targetWord) {
                         disable = if (disable) {
+                            usedLetters[i] = true
                             disableButtonByLetter('A'+ i)
                             false
                         } else
