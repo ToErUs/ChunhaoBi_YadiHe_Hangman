@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
 import androidx.core.graphics.drawable.toBitmap
@@ -236,26 +237,35 @@ class MainActivity : ComponentActivity() {
         binding.hintMsg.text = "Hint: "+hintString
     }
     private fun setGuessedWord(word:String){
+        val density = resources.displayMetrics.density
+
         //_word should be a combination of spaces and guessed letters, eg. "  AM l "
         binding.word.text = word
         Log.d(TAG,	"Set word to "+word)
 
         val linearLayout = findViewById<LinearLayout>(R.id.wordBox)
-        val margin=10
+
         linearLayout.removeAllViews();
         for (char in word) {
             val textView = TextView(this)
+            val textSizeInSp = 16 // Set your desired text size in sp
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp.toFloat())
+            val scaledPixelsToPixels = textSizeInSp * density
+            val widthInPixels = scaledPixelsToPixels.toInt() * 3 // Adjust the multiplier as needed
+            val heightInPixels = scaledPixelsToPixels.toInt() * 3
+            val margin=(scaledPixelsToPixels*0.5).toInt()
+            val padding = (scaledPixelsToPixels*0.5).toInt()
             textView.setText(char.toString())
-            textView.width = 90
-            textView.height = 90
+            textView.width = widthInPixels
+            textView.height = heightInPixels
             //textView.setBackgroundColor(Color.GRAY)
             textView.gravity = Gravity.CENTER
             val drawable = resources.getDrawable(R.drawable.underline, null) // Replace `your_image` with the name of your image file
-            val bitmapDrawable = BitmapDrawable(resources, drawable.toBitmap(90, 90, Bitmap.Config.ARGB_8888))
+            val bitmapDrawable = BitmapDrawable(resources, drawable.toBitmap(widthInPixels, heightInPixels, Bitmap.Config.ARGB_8888))
             textView.background = bitmapDrawable
 
             // Set padding to ensure the text is centered both horizontally and vertically
-            val padding = 10 // Adjust padding as needed
+             // Adjust padding as needed
             textView.setPadding(padding, padding, padding, padding)
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
