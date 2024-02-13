@@ -33,20 +33,19 @@
             android:text="word"
             android:textColor="#EA5246"
             android:textSize="1sp"
+            tools:text = "CHICKEN"
             android:textStyle="bold|italic"
             android:visibility="invisible"/>
+
         <LinearLayout
+            style="@style/linearRow"
             android:id="@+id/wordBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            />
+            android:orientation="horizontal"/>
 
         <TextView
             android:id="@+id/hintMsg"
             android:layout_width="300dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="Hint:"
             android:textColor="#EA5246"
@@ -57,7 +56,7 @@
             android:id="@+id/hintBtn"
             android:gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="Hint"
             android:visibility="invisible"/>
     </LinearLayout>
@@ -74,7 +73,7 @@
         <TextView
             android:id="@+id/txtewo"
             android:layout_width="300dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:gravity="center"
             android:text="Choose Your Letter"
             android:textColor="#EA5246"

@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.NewApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="linearRow">
+        <item name="android:layout_weight">0</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="textViewRow">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+<!--        <item name="paddingEnd">10dp</item>-->
+<!--        <item name="paddingStart">10dp</item>-->
+<!--        <item name="android:layout_marginEnd">10dp</item>-->
+<!--        <item name="android:layout_marginStart">10dp</item>-->
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>
