@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">NewApp</string>
+    <string name="chicken">CHICKEN</string>
+    <string name="australia">AUSTRALIA</string>
+    <string name="football">FOOTBALL</string>
+    <string name="triangle">TRIANGLE</string>
+    <string name="happy">HAPPY</string>
+    <string name="chicken_hint">A kind of animal</string>
+    <string name="australia_hint">A country</string>
+    <string name="football_hint">A popular sport</string>
+    <string name="triangle_hint">A shape</string>
+    <string name="happy_hint">A mood</string>
+
 </resources>
