@@ -1,4 +1,4 @@
-package com.example.newapp
+package com.example.ChunhaoBi_YadiHe_Hangman
 
 import android.content.ContentValues.TAG
 import android.util.Log

@@ -1,29 +1,23 @@
-package com.example.newapp
+package com.example.ChunhaoBi_YadiHe_Hangman
 
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.ContentValues
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.view.Gravity
 import android.widget.LinearLayout
 import androidx.core.graphics.drawable.toBitmap
-import androidx.fragment.app.DialogFragment
 
 import androidx.lifecycle.ViewModelProvider
-import com.example.newapp.databinding.LayoutBinding
+import com.example.ChunhaoBi_YadiHe_Hangman.databinding.LayoutBinding
 
 private const val TAG = "MainActivity"
 private const val LETTER_NUM = 26
